@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vito Iacopelli Pizza Dough Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      color: #333;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, button {
+      padding: 10px;
+      margin: 8px 0;
+      width: 100%;
+    }
+    .results {
+      margin-top: 20px;
+      background-color: #f1f1f1;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    pre {
+      background-color: #eee;
+      padding: 10px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Vito Iacopelli Pizza Dough Calculator (Poolish Method)</h1>
+    <label for="ballWeight">Weight per dough ball (g):</label>
+    <input type="number" id="ballWeight" value="230">
+
+    <label for="ballCount">Number of dough balls:</label>
+    <input type="number" id="ballCount" value="4">
+
+    <label for="hydration">Hydration (%):</label>
+    <input type="number" id="hydration" value="66">
+
+    <button onclick="calculateDough()">Calculate</button>
+
+    <div class="results" id="results"></div>
+  </div>
+
+  <script>
+    function calculateDough() {
+      const ballWeight = parseFloat(document.getElementById('ballWeight').value);
+      const ballCount = parseInt(document.getElementById('ballCount').value);
+      const hydration = parseFloat(document.getElementById('hydration').value);
+
+      const totalDough = ballWeight * ballCount;
+      const waterRatio = hydration / 100;
+      const totalFlour = totalDough / (1 + waterRatio);
+      const totalWater = totalFlour * waterRatio;
+
+      const poolishFlour = 300; // fixed per Vito Iacopelli's recipe
+      const poolishWater = 300; // fixed
+      const honey = 5;
+      const dryYeast = 5;
+
+      const finalFlour = totalFlour - poolishFlour;
+      const finalWater = totalWater - poolishWater;
+      const salt = 40; // fixed per Vito Iacopelli
+
+      const now = new Date();
+      const poolishStart = new Date(now.getTime());
+      const poolishFridge = new Date(poolishStart.getTime() + 1 * 60 * 60 * 1000);
+      const doughMixTime = new Date(poolishFridge.getTime() + 12 * 60 * 60 * 1000);
+      const ballTime = new Date(doughMixTime.getTime() + 2 * 60 * 60 * 1000);
+      const bakeTime = new Date(ballTime.getTime() + 2 * 60 * 60 * 1000);
+
+      document.getElementById('results').innerHTML = `
+        <h2>Ingredients</h2>
+        <pre>
+Total Dough: ${totalDough.toFixed(1)} g
+Total Flour: ${totalFlour.toFixed(1)} g
+Total Water: ${totalWater.toFixed(1)} g
+Salt: ${salt.toFixed(1)} g (fixed)
+
+-- Poolish (Vito Iacopelli style) --
+Flour: ${poolishFlour.toFixed(1)} g
+Water: ${poolishWater.toFixed(1)} ml
+Dry Yeast: ${dryYeast.toFixed(1)} g
+Honey: ${honey.toFixed(1)} g
+
+-- Final Dough --
+Flour: ${finalFlour.toFixed(1)} g
+Water: ${finalWater.toFixed(1)} ml
+        </pre>
+
+        <h2>Step-by-Step Timeline</h2>
+        <pre>
+1. Make Poolish: ${poolishStart.toLocaleString()}
+   - Mix poolish ingredients (water, yeast, honey, flour).
+   - Let sit at room temp for 1 hour.
+
+2. Refrigerate Poolish: ${poolishFridge.toLocaleString()}
+   - Store overnight in the fridge (~12 hrs).
+
+3. Mix Final Dough: ${doughMixTime.toLocaleString()}
+   - Let poolish come to room temp (30–45 min prior).
+   - Mix with remaining flour, water, and salt.
+   - Knead and rest covered for 1 hour.
+
+4. Ball the Dough: ${ballTime.toLocaleString()}
+   - Divide into ${ballCount} x ${ballWeight} g balls.
+   - Rest 2 hrs at room temp or refrigerate up to 5 days.
+
+5. Ready to Bake: ${bakeTime.toLocaleString()}
+   - Bring to room temp 2 hrs before baking.
+        </pre>
+      `;
+    }
+  </script>
+</body>
+</html>
+
