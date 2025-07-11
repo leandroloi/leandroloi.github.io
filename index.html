@@ -60,75 +60,84 @@
     <div class="results" id="results"></div>
   </div>
 
-  <script>
-    function calculateDough() {
-      const ballWeight = parseFloat(document.getElementById('ballWeight').value);
-      const ballCount = parseInt(document.getElementById('ballCount').value);
-      const hydration = parseFloat(document.getElementById('hydration').value);
+<script>
+  function calculateDough() {
+    const ballWeight = parseFloat(document.getElementById('ballWeight').value);
+    const ballCount = parseInt(document.getElementById('ballCount').value);
+    const hydration = parseFloat(document.getElementById('hydration').value);
 
-      const totalDough = ballWeight * ballCount;
-      const waterRatio = hydration / 100;
-      const totalFlour = totalDough / (1 + waterRatio);
-      const totalWater = totalFlour * waterRatio;
+    const totalDough = ballWeight * ballCount;
+    const waterRatio = hydration / 100;
+    const totalFlour = totalDough / (1 + waterRatio);
+    const totalWater = totalFlour * waterRatio;
 
-      const poolishFlour = 300; // fixed per Vito Iacopelli's recipe
-      const poolishWater = 300; // fixed
-      const dryYeast = 5 * (poolishFlour / 300); // scale yeast with flour
-      const honey = 5 * (poolishFlour / 300); // scale honey with flour
+    const poolishFlour = totalFlour * 0.24;
+    const poolishWater = poolishFlour; // 100% hydration
+    const dryYeast = poolishFlour * 0.0167;
+    const honey = totalFlour * 0.004;
+    const salt = totalFlour * 0.032;
 
-      const finalFlour = totalFlour - poolishFlour;
-      const finalWater = totalWater - poolishWater;
-      const salt = (40 / 1250) * totalFlour; // scaled salt based on flour ratio
+    const finalFlour = totalFlour - poolishFlour;
+    const finalWater = totalWater - poolishWater;
 
-      const now = new Date();
-      const poolishStart = new Date(now.getTime());
-      const poolishFridge = new Date(poolishStart.getTime() + 1 * 60 * 60 * 1000);
-      const doughMixTime = new Date(poolishFridge.getTime() + 12 * 60 * 60 * 1000);
-      const ballTime = new Date(doughMixTime.getTime() + 2 * 60 * 60 * 1000);
-      const bakeTime = new Date(ballTime.getTime() + 2 * 60 * 60 * 1000);
+    const now = new Date();
+    const poolishStart = new Date(now.getTime());
+    const poolishFridge = new Date(poolishStart.getTime() + 1 * 60 * 60 * 1000);
+    const doughMixTime = new Date(poolishFridge.getTime() + 12 * 60 * 60 * 1000);
+    const ballTime = new Date(doughMixTime.getTime() + 2 * 60 * 60 * 1000);
+    const bakeTime = new Date(ballTime.getTime() + 2 * 60 * 60 * 1000);
 
-      document.getElementById('results').innerHTML = `
-        <h2>Ingredients</h2>
-        <pre>
+    document.getElementById('results').innerHTML = `
+      <h2>Ingredients</h2>
+      <pre>
 Total Dough: ${totalDough.toFixed(1)} g
 Total Flour: ${totalFlour.toFixed(1)} g
 Total Water: ${totalWater.toFixed(1)} g
-Salt: ${salt.toFixed(1)} g
+Salt (3.2%): ${salt.toFixed(1)} g
 
--- Poolish (Vito Iacopelli style) --
+-- Poolish (24% of flour) --
 Flour: ${poolishFlour.toFixed(1)} g
 Water: ${poolishWater.toFixed(1)} ml
-Dry Yeast: ${dryYeast.toFixed(1)} g
-Honey: ${honey.toFixed(1)} g
+Dry Yeast: ${dryYeast.toFixed(2)} g
+Honey: ${honey.toFixed(2)} g
 
 -- Final Dough --
 Flour: ${finalFlour.toFixed(1)} g
 Water: ${finalWater.toFixed(1)} ml
-        </pre>
+      </pre>
 
-        <h2>Step-by-Step Timeline</h2>
-        <pre>
+      <h2>Step-by-Step Timeline & Instructions</h2>
+      <pre>
 1. Make Poolish: ${poolishStart.toLocaleString()}
-   - Mix poolish ingredients (water, yeast, honey, flour).
-   - Let sit at room temp for 1 hour.
+   - Mix lukewarm water, dry yeast, honey, and flour until combined.
+   - Cover and rest at room temp for 1 hour.
 
 2. Refrigerate Poolish: ${poolishFridge.toLocaleString()}
-   - Store overnight in the fridge (~12 hrs).
+   - Place in fridge for 12 to 16 hours.
 
-3. Mix Final Dough: ${doughMixTime.toLocaleString()}
-   - Let poolish come to room temp (30–45 min prior).
-   - Mix with remaining flour, water, and salt.
-   - Knead and rest covered for 1 hour.
+3. Final Dough Preparation: ${doughMixTime.toLocaleString()}
+   - Remove poolish from fridge 30–45 minutes to bring to room temp.
+   - In a bowl, mix poolish, remaining flour, and ALL the salt.
+   - Slowly add remaining water little by little. DO NOT dump all at once.
+   - Mix using stand mixer (8–10 minutes) or knead by hand (10+ mins).
+   - Dough should be sticky but cohesive and stretchy.
+   - Rest dough covered in an oiled bowl for 1 hour.
 
 4. Ball the Dough: ${ballTime.toLocaleString()}
-   - Divide into ${ballCount} x ${ballWeight} g balls.
-   - Rest 2 hrs at room temp or refrigerate up to 5 days.
+   - Turn dough out on board, pat with oiled hands.
+   - Weigh and divide: ${ballCount} × ${ballWeight} g.
+   - Shape into balls: fold dough under itself, rotate, and seal bottom.
+   - Place on floured tray, space 2–3 fingers apart. Light oil on top.
+   - Cover with plastic wrap and rest for 2 hours.
+   - Store in fridge up to 5 days if not using immediately.
 
 5. Ready to Bake: ${bakeTime.toLocaleString()}
-   - Bring to room temp 2 hrs before baking.
-        </pre>
-      `;
-    }
-  </script>
+   - Bring to room temp 2 hours before baking.
+   - Dough should be soft, elastic, and bubbly on the bottom.
+      </pre>
+    `;
+  }
+</script>
+
 </body>
 </html>
